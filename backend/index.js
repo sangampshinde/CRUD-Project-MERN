@@ -3,20 +3,33 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 
-
 const app = express();
 app.use(bodyParser.json());
 dotenv.config();
 
-const PORT = process.env.PORT || 7000;
-const DBURL = process.env.DB;
+const PORT = process.env.PORT || 5000;
+const DB = process.env.DB;
 
+// db connection
 try {
-    mongoose.connect(DBURL);
-    console.log("Conncted to Database Sucessfully");
+    mongoose.connect(DB);
+    console.log('DB Connected Sucessfully');
 } catch (error) {
-    console.log("Error connecting to Database:",error);
+    console.error('DB Connection Error:', error.message);
+    process.exit(1); 
 }
+
+
+app.listen(PORT,() => {
+        console.log(`Server started at PORT: ${PORT}`);
+
+})
+
+
+
+
+
+
 
 
 
