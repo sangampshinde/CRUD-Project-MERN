@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import dotenv from "dotenv";
+import route from './routes/userRoute.js';
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +20,10 @@ try {
     console.error('DB Connection Error:', error.message);
     process.exit(1); 
 }
+
+// middlewares
+app.use('/api',route);
+
 
 
 app.listen(PORT,() => {
