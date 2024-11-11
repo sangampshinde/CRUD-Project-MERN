@@ -1,9 +1,18 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import User from './getUser/GetUser';
+import AddUser from './addUser/AddUser';
 
 const App = () => {
   return (
-    <div className='text-primary'>App</div>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<User />} />
+        <Route path="/add" element={<AddUser />} />
 
-export default App
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
