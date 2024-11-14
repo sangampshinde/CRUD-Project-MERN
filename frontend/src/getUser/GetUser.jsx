@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './GetUser.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 
 const User = () => {
 
       const [users,setUsers] = useState([]);
+    
 
       useEffect(()=>{
         const fetchData = async (req,res) => {
@@ -17,11 +19,21 @@ const User = () => {
             } catch (error) {
                 console.log('Error fetching data', error);
             }
-
         }
         fetchData();
-
       },[]);
+
+      const deleteUser = async (userId)=>{
+        try {
+            const response = await axios.delete(`http://localhost:8000/api/delete/user/${userId}`);
+            setUsers(users.filter(user=>user._id!== userId));
+            toast.success(response.data.message,{position: "top-right"});
+        } catch (error) {
+            console.log('Error deleting user', error);
+            toast.error('Error deleting user');
+            
+        }
+      }
 
 
   return (
@@ -29,6 +41,10 @@ const User = () => {
     
     <div className='user-table'>
         <Link to="/add" type="button" className="btn btn-primary">Add User <i className="fa-solid fa-user-plus"></i></Link>
+        {users.length === 0? (<div className='noData text-center'>
+            <h3>No Data to Display</h3>
+            <p>Please Add New Users</p>
+        </div>):(
         <table className='table table-bordered'>
             <thead>
                 <tr>
@@ -42,29 +58,20 @@ const User = () => {
             <tbody>
                 {users.map((user, index)=>{
                     return(
-                            <tr>
+                            <tr key={index}>
                                 <td>{index+1}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.address}</td>
-                                <td><button type="button" className="btn btn-info"><i className="fa-solid fa-pen-to-square"></i></button>  <button type="button" className="btn btn-danger"><i className="fa-solid fa-trash-can"></i></button></td>
+                                <td><Link to={`/update/${user._id}`} type="button" className="btn btn-info"><i className="fa-solid fa-pen-to-square"></i></Link>  <button type="button" onClick={() => deleteUser(user._id)} className="btn btn-danger"><i className="fa-solid fa-trash-can"></i></button></td>
                             </tr>
                           )
-                })}
-                
+                 })}
             </tbody>
-            
-
-        </table>
-
+        </table>)}
     </div>
-    
-    
-    
-    
-    
+            
     </>
   )
 }
-
 export default User

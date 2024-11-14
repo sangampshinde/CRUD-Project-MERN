@@ -28,7 +28,10 @@ export const create = async(req,res)=>{
     const saveData = await newUser.save();
     
     // step 6: send the saved user data
-    res.status(200).send(saveData);
+    // res.status(200).json(saveData);
+    res.status(200).json({message: "User created successfully"});
+    
+
            
     } catch (error) {
         // handel the error here
@@ -41,24 +44,25 @@ export const create = async(req,res)=>{
 };
 
 // get all users from the database
-export const getAllUsers = async (req,res) => {
+export const getAllUsers = async (req, res) => {
     try {
         // get all users from the database
         const usersData = await User.find();
 
         // if there are no users
-        if(!usersData|| usersData.length === 0 ){
-            res.status(404).json({message:'no users found'});
-        };
+        if (!usersData || usersData.length === 0) {
+            return res.status(404).json({ message: 'No users found' });
+        }
 
-        // if present
-        res.status(200).json(usersData);
+        // if users are found, return them
+        return res.status(200).json(usersData);
 
     } catch (error) {
-        res.status(500).json({errorMessage: error.message});
+        // handle any server errors
+        return res.status(500).json({ errorMessage: error.message });
     }
-
 };
+
 
 // get User by ID
 export const getUserById = async(req,res)=>{
@@ -96,7 +100,9 @@ export const update = async(req,res)=>{
         // update user data with new data from request body
         const updatedData = await User.findByIdAndUpdate(id,req.body,{new:true});
         // return user updated data
-        res.status(200).json(updatedData);
+        // res.status(200).json(updatedData);
+        res.status(200).json({message:'User updated successfully'});
+        
 
     } catch (error) {
         res.status(500).json({errorMessage: error.message});

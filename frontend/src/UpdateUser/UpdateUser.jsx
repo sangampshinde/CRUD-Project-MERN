@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import "./AddUser.css";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import "./UpdateUser.css";
+import { Link, useNavigate,useParams } from "react-router-dom";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
 
-const AddUser = () => {
+const UpdateUser = () => {
     const User= {
         name: "",
         email: "",
@@ -14,22 +14,40 @@ const AddUser = () => {
 
     const [user, setUser] = useState(User);
     const navigate = useNavigate();
+    const { id } = useParams();
+
 
     const inputHandler = (e) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
     };
 
+    //NOTE:You canot give async to useeffect function
+    useEffect(()=>{
+
+        const fetchUser = async () => {
+            try {
+                 const response = await axios.get(`http://localhost:8000/api/user/${id}`);
+                 setUser(response.data); 
+            } catch (error) {
+                console.log(error);
+                toast.error("Failed to fetch user");
+            }
+        }
+        fetchUser();
+    },[id])
+
     const submitForm = async (e) => {
         e.preventDefault();
         try {
-             const response = await axios.post('http://localhost:8000/api/user', user);
-             toast.success(response.data.message);
+             const response = await axios.put(`http://localhost:8000/api/update/user/${id}`, user);
+             toast.success(response.data.message,{position :"top-right"});
              navigate("/");
 
 
         } catch (error) {
-            console.error("Error creating user:", error,{position :"top-right"});
+            console.error("Error creating user:", error);
+            toast.error("Failed to update user",{position :"top-right"});
         }
     };
 
@@ -38,7 +56,7 @@ const AddUser = () => {
             <Link to="/" type="button" className="btn btn-secondary">
                 <i className="fa-solid fa-backward"></i> Back
             </Link>
-            <h3 className='mt-3'>Add New User</h3>
+            <h3 className='mt-3'>Update User</h3>
             <form className='AddNewUserForm' onSubmit={submitForm}>
                 <div className="form-group">
                     <label htmlFor="name" className="form-label mt-2">Name</label>
@@ -83,4 +101,4 @@ const AddUser = () => {
     );
 };
 
-export default AddUser;
+export default UpdateUser;
