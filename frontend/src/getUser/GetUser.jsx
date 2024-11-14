@@ -14,7 +14,7 @@ const User = () => {
       useEffect(()=>{
         const fetchData = async (req,res) => {
             try {
-                const response = await axios.get("http://localhost:8000/api/users");
+                const response = await axios.get("https://crud-project-mern.onrender.com/api/users");
                 setUsers(response.data);   
             } catch (error) {
                 console.log('Error fetching data', error);
@@ -25,7 +25,7 @@ const User = () => {
 
       const deleteUser = async (userId)=>{
         try {
-            const response = await axios.delete(`http://localhost:8000/api/delete/user/${userId}`);
+            const response = await axios.delete(`https://crud-project-mern.onrender.com/api/delete/user/${userId}`);
             setUsers(users.filter(user=>user._id!== userId));
             toast.success(response.data.message,{position: "top-right"});
         } catch (error) {

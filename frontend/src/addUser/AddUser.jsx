@@ -23,7 +23,7 @@ const AddUser = () => {
     const submitForm = async (e) => {
         e.preventDefault();
         try {
-             const response = await axios.post('http://localhost:8000/api/user', user);
+             const response = await axios.post('https://crud-project-mern.onrender.com/api/user', user);
              toast.success(response.data.message);
              navigate("/");
 

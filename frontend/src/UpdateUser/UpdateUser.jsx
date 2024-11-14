@@ -27,7 +27,7 @@ const UpdateUser = () => {
 
         const fetchUser = async () => {
             try {
-                 const response = await axios.get(`http://localhost:8000/api/user/${id}`);
+                 const response = await axios.get(`https://crud-project-mern.onrender.com/api/user/${id}`);
                  setUser(response.data); 
             } catch (error) {
                 console.log(error);
@@ -40,7 +40,7 @@ const UpdateUser = () => {
     const submitForm = async (e) => {
         e.preventDefault();
         try {
-             const response = await axios.put(`http://localhost:8000/api/update/user/${id}`, user);
+             const response = await axios.put(`https://crud-project-mern.onrender.com/api/update/user/${id}`, user);
              toast.success(response.data.message,{position :"top-right"});
              navigate("/");
 
